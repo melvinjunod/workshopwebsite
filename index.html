@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="website.css">
+        <title>Meal database</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $(".searchbutton").click(function() {
+                    $("#mainDiv").slideUp("slow", function() {
+                        $("#foodListTBody").empty();
+                        $.getJSON("https://www.themealdb.com/api/json/v1/1/search.php?s=" + $("#foodtextsearch").val(), function(data) {
+                            if(data.meals) {
+                                $.each(data.meals, function(key, val) {
+                                    $("#foodListTBody").append("<tr><td><img src='"+val.strMealThumb+"' class='smallImage'></td><td>" + val.strMeal + "</td><td>" + val.strArea + "</td><td>" + val.strInstructions + "</td></tr>");
+                                });
+                            }
+                            else {
+                                $("#foodListTBody").append("<tr><td colspan=4>No meals found with the given query</td></tr>");
+                            }
+                            $("#mainDiv").slideDown("slow");
+                        });
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="topbar">
+            <font>Meal database</font>
+              <div class="foodtextinputdiv">
+                Search foods: <input type="text" id="foodtextsearch" class="foodtextinput"/>
+                <img src="searchbutton.png" class="searchbutton">
+              </div>
+          </div>
+        <div id="mainDiv">
+            <table class="foodlisttable">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Area</th>
+                        <th>Instructions</th>
+                    </tr>
+                </thead>
+                <div id="tBodyDiv">
+                    <tbody id="foodListTBody">
+                    </tbody>
+                </div>
+            </table>
+        </div>
+    </body>
+</html>
